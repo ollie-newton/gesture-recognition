@@ -1,18 +1,15 @@
 import numpy as np
+import pandas as pd
 
 def overlapping_windows(df, window_size, overlap):
-    arr = df.values
-    num_arrays = int(np.ceil((len(arr) - window_size) / overlap)) + 1
+    no_windows = round(df.shape[0] / (window_size-overlap) - 1)
 
-    # Create an empty list to store the smaller arrays
-    small_arrays = []
+    newer_df = pd.DataFrame()
 
-    # Extract the smaller arrays from the larger array using a loop
-    for i in range(num_arrays):
-        start = i * overlap
-        end = start + window_size
-        small_arrays.append(arr[start:end, :])
+    for i in range(0,no_windows):
 
-    # Print the shape of the first smaller array to verify that it has the desired size
-    print(small_arrays[7])
-   
+        new_df = pd.DataFrame(df.iloc[i*(window_size-overlap):window_size+i*(window_size-overlap),:])
+        new_df = new_df.reset_index(drop=True)
+        newer_df = pd.concat([newer_df, new_df], axis=1)
+
+    return newer_df
