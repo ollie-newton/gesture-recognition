@@ -1,16 +1,36 @@
 import pandas as pd
 import numpy as np
+import plotly.express as px
 
-def time_features(df, window_size, overlap):
 
-    no_windows = round(df.shape[0] / (window_size-overlap) - 1)
+def time_features(windowed_df, feature_df):
 
-    newer_df = pd.DataFrame()
+    feature_df['meanEE'] = 0
+    feature_df['meanEF'] = 0
+    feature_df['varRE'] = 0
+    feature_df['varRF'] = 0
+    for i in range(0,len(feature_df)):
 
-    for i in range(0,no_windows):
+        meanEE = np.mean(windowed_df.iloc[:, (5*i+1)])
+        feature_df.iloc[i, 1] = meanEE
 
-        new_df = pd.DataFrame(df.iloc[i*(window_size-overlap):window_size+i*(window_size-overlap),:])
-        new_df = new_df.reset_index(drop=True)
-        newer_df = pd.concat([newer_df, new_df], axis=1)
+        meanEF = np.mean(windowed_df.iloc[:, (5*i+3)])
+        feature_df.iloc[i, 2] = meanEF
 
-    return newer_df
+        varRE = np.var(windowed_df.iloc[:, (5*i)])
+        feature_df.iloc[i, 3] = varRE
+
+        varRF = np.var(windowed_df.iloc[:, (5*i+2)])
+        feature_df.iloc[i, 4] = varRF
+
+    pd.set_option('display.max_rows', None)
+    print(feature_df)
+    
+    fft_rawFlex = np.fft.fft(windowed_df.iloc[:,2]) #change time compo
+
+    print(fft_rawFlex)
+    mag_rawFlex = np.abs(fft_rawFlex)
+
+    fig = px.line(mag_rawFlex)
+
+    fig.show()
