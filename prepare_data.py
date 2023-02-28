@@ -3,6 +3,7 @@ import pandas as pd
 from create_windows import overlapping_windows
 from visualise_data import line_plot
 from create_feature import time_features
+from normalise import normalise
 
 
 #create a filepath to the original df
@@ -26,3 +27,10 @@ print(windows)
 features = time_features(windows, feature_df)
 
 
+print(features)
+
+norm_features = normalise(features)
+
+print(norm_features)
+
+norm_features.to_csv('features.csv', index=False)

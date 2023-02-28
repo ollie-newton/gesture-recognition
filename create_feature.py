@@ -24,13 +24,13 @@ def time_features(windowed_df, feature_df):
         feature_df.iloc[i, 4] = varRF
 
     pd.set_option('display.max_rows', None)
-    print(feature_df)
+    return feature_df
     
-    fft_rawFlex = np.fft.fft(windowed_df.iloc[:,2]) #change time compo
+    # fft_rawFlex = np.fft.fft(windowed_df.iloc[:,2]) #change time compo
 
-    print(fft_rawFlex)
-    mag_rawFlex = np.abs(fft_rawFlex)
+    # print(fft_rawFlex)
+    # mag_rawFlex = np.abs(fft_rawFlex)
 
-    fig = px.line(mag_rawFlex)
+    # fig = px.line(mag_rawFlex)
 
-    fig.show()
+    # fig.show()
